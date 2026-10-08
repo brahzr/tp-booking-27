@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>حجز مشاريع الأعمال التطبيقية · ماستر 2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0f1729; --ink2:#475569; --muted:#94a3b8; --line:#e2e8f0; --bg:#f5f7fb; --card:#fff;
+    --navy:#14203d; --accent:#0ea5a4; --accent-2:#0b8584; --accent-soft:#e6f7f6;
+    --warn:#b45309; --warn-soft:#fef3c7; --err:#b91c1c; --err-soft:#fee2e2; --ok:#047857; --ok-soft:#d1fae5;
+    --r:14px; --font:"IBM Plex Sans Arabic",Inter,system-ui,Tahoma,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.6}
+  a{color:var(--accent-2)}
+  .ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+
+  /* hero */
+  .hero{background:radial-gradient(1200px 400px at 15% -10%,#1d4e6b 0%,transparent 60%),linear-gradient(225deg,#0f1a33,#14203d);color:#fff;padding:44px 0 72px}
+  .tag{display:inline-block;font-size:13px;font-weight:600;color:#7dd3d2;background:rgba(14,165,164,.15);border:1px solid rgba(125,211,210,.3);padding:4px 12px;border-radius:999px}
+  h1{font-size:clamp(28px,4.4vw,44px);line-height:1.3;margin:14px 0 10px;font-weight:700}
+  .hero p{color:#cbd5e1;max-width:700px;margin:0;font-size:16px}
+  .gh{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:22px;background:rgba(255,255,255,.07);border:1px solid rgba(125,211,210,.35);border-radius:12px;padding:14px 16px;max-width:700px}
+  .gh svg{flex:none}
+  .gh div{flex:1;min-width:200px}
+  .gh b{display:block;font-size:15px}
+  .gh span{font-size:13px;color:#94a3b8}
+  .gh a{background:var(--accent);color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:9px 16px;border-radius:9px;white-space:nowrap}
+  .gh a:hover{background:var(--accent-2)}
+  .facts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+  .fact{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px}
+  .fact b{display:block;font-size:21px;font-weight:700}
+  .fact span{font-size:13px;color:#94a3b8}
+
+  /* layout */
+  main{margin-top:-44px;padding-bottom:60px}
+  .grid{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:0 1px 2px rgba(15,23,41,.04),0 8px 24px rgba(15,23,41,.05)}
+  .panel + .panel{margin-top:20px}
+  .step{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+  .step i{font-style:normal;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+  h2{font-size:19px;margin:0}
+  .sub{color:var(--ink2);font-size:14px;margin:0 0 14px;margin-inline-start:38px}
+
+  /* filters */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:center}
+  .chip{border:1px solid var(--line);background:#fff;color:var(--ink2);border-radius:999px;padding:5px 12px;font:500 13px var(--font);cursor:pointer}
+  .chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .toggle{margin-inline-start:auto;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink2);cursor:pointer;font-weight:500;margin-top:0;margin-bottom:0}
+
+  /* projects */
+  .projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+  .proj{position:relative;text-align:start;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:14px;cursor:pointer;font:inherit;color:inherit;transition:border-color .15s,box-shadow .15s,transform .15s;display:flex;flex-direction:column;gap:6px}
+  .proj:hover:not([disabled]){border-color:var(--accent);box-shadow:0 4px 14px rgba(14,165,164,.12);transform:translateY(-1px)}
+  .proj.sel{border-color:var(--accent);box-shadow:0 0 0 3px rgba(14,165,164,.2)}
+  .proj[disabled]{cursor:not-allowed;background:#f8fafc}
+  .proj[disabled] .t,.proj[disabled] .p,.proj[disabled] .en{color:var(--muted)}
+  .row{display:flex;align-items:center;gap:8px;justify-content:space-between}
+  .pid{font:700 12px Inter,sans-serif;color:var(--muted)}
+  .algo{font:600 12px Inter,sans-serif;padding:3px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent-2);direction:ltr}
+  .proj[disabled] .algo{background:#eef2f7;color:var(--muted)}
+  .t{font-weight:700;font-size:15.5px;line-height:1.4}
+  .en{font:500 12px Inter,sans-serif;color:var(--muted);direction:ltr;text-align:end;margin-top:-4px}
+  .p{font-size:13.5px;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .p.open{-webkit-line-clamp:unset}
+  .meta{font-size:12px;color:var(--ink2);margin-top:auto;padding-top:6px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:2px}
+  .meta a{font-weight:600;text-decoration:none;font-family:Inter,sans-serif}
+  .meta .m{font-family:Inter,sans-serif;direction:ltr;unicode-bidi:isolate}
+  .badge{font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:6px}
+  .badge.taken{background:var(--err-soft);color:var(--err)}
+  .badge.free{background:var(--ok-soft);color:var(--ok)}
+  .more{color:var(--accent-2);font:600 12px var(--font);cursor:pointer;align-self:flex-start}
+
+  /* slots */
+  .days{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+  .day{border:1px solid var(--line);border-radius:12px;padding:12px}
+  .day h3{margin:0 0 2px;font-size:15px}
+  .day small{color:var(--muted);font-size:12px}
+  .slots{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+  .slot{display:flex;justify-content:space-between;align-items:center;border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:8px 10px;font:600 14px var(--font);color:var(--ink);cursor:pointer}
+  .slot .ltr{font-family:Inter,sans-serif}
+  .slot:hover:not([disabled]){border-color:var(--accent)}
+  .slot.sel{border-color:var(--accent);background:var(--accent-soft)}
+  .slot[disabled]{cursor:not-allowed;color:var(--muted);background:#f8fafc}
+  .slot[disabled] .ltr{text-decoration:line-through}
+
+  /* form */
+  label{display:block;font-size:13.5px;font-weight:600;margin:12px 0 5px}
+  label small{font-weight:400;color:var(--muted)}
+  input[type=text]{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px;font:15px var(--font);color:var(--ink)}
+  input[type=text]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(14,165,164,.15)}
+  .summary{background:var(--bg);border-radius:10px;padding:12px;font-size:14px;margin-top:14px}
+  .summary div{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+  .summary span{color:var(--ink2);flex:none}
+  .summary b{text-align:end}
+  .btn{width:100%;margin-top:14px;padding:12px;border:0;border-radius:10px;background:var(--accent);color:#fff;font:700 16px var(--font);cursor:pointer}
+  .btn:hover:not([disabled]){background:var(--accent-2)}
+  .btn[disabled]{background:#cbd5e1;cursor:not-allowed}
+  .msg{margin-top:12px;padding:10px 12px;border-radius:9px;font-size:14px;display:none}
+  .msg.err{display:block;background:var(--err-soft);color:var(--err)}
+  .msg.warn{display:block;background:var(--warn-soft);color:var(--warn)}
+  .sticky{position:sticky;top:16px}
+  .rules{font-size:13.5px;color:var(--ink2);padding-inline-start:18px;margin:8px 0 0}
+  .rules li{margin:5px 0}
+  .live{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;margin-top:10px}
+  .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
+  .closed{background:var(--warn-soft);color:var(--warn);border-radius:var(--r);padding:16px;font-weight:600;margin-bottom:20px;display:none}
+  .loading{padding:40px;text-align:center;color:var(--muted)}
+
+  /* modal */
+  .modal{position:fixed;inset:0;background:rgba(15,23,41,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
+  .modal.show{display:flex}
+  .box{background:#fff;border-radius:16px;max-width:460px;width:100%;padding:26px;text-align:center}
+  .tick{width:56px;height:56px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;margin:0 auto 10px;font-size:28px;font-weight:800}
+  .code{font-family:ui-monospace,Menlo,monospace;font-size:22px;font-weight:800;letter-spacing:.08em;background:var(--bg);border-radius:8px;padding:8px;margin:10px 0;direction:ltr}
+  .box .summary{text-align:start}
+
+  @media (max-width:900px){.grid{grid-template-columns:1fr}.sticky{position:static}.facts{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:480px){.sub{margin-inline-start:0}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="tag">ماستر 2 · علم البيانات · مشاريع الأعمال التطبيقية (TP)</span>
+    <h1>اختر مشروعك.<br>واحجز موعد عرضك.</h1>
+    <p>مقياس التعلم العميق وبرمجة بايثون المتقدمة. اختاروا في ثنائيات مشروعاً واحداً من بين 18 مشروعاً: اجمعوا البيانات، حدّدوا الإشكالية، طوّروا الخوارزمية ببايثون، ثم قدّموا عملكم في 20 دقيقة. كل مشروع وكل موعد يُحجز لمجموعة واحدة فقط، والأولوية لمن يسجّل أولاً.</p>
+
+    <div class="gh">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.25-1.28-5.25-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+      <div>
+        <b>الدروس والأمثلة التطبيقية</b>
+        <span>تجدون جميع الدروس والأمثلة بلغة بايثون في مستودع GitHub الخاص بالمقياس</span>
+      </div>
+      <a href="https://github.com/brahzr/Deep-Learning" target="_blank" rel="noopener">فتح المستودع ↗</a>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><b id="fProjects" class="ltr">18</b><span>مشروع متاح</span></div>
+      <div class="fact"><b id="fSlots" class="ltr">–</b><span>موعد شاغر</span></div>
+      <div class="fact"><b>20 دقيقة</b><span>لكل مجموعة، 3 عروض في الحصة</span></div>
+      <div class="fact"><b>18 أكتوبر ← 6 ديسمبر</b><span>العروض أيام الأحد</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="closed" id="closed">التسجيل مغلق حالياً. يمكنكم مع ذلك الاطلاع على المشاريع والمواعيد المتبقية.</div>
+  <div class="grid">
+    <div>
+      <section class="panel">
+        <div class="step"><i>1</i><h2>اختر مشروعاً</h2></div>
+        <p class="sub">انقر على بطاقة لاختيارها. البطاقات الرمادية محجوزة.</p>
+        <div class="filters" id="filters"></div>
+        <div id="projects" class="projects"><div class="loading">جارٍ تحميل المشاريع…</div></div>
+      </section>
+
+      <section class="panel">
+        <div class="step"><i>2</i><h2>اختر موعد العرض</h2></div>
+        <p class="sub">مواعيد مدتها 20 دقيقة، 3 مجموعات في كل حصة. لا توجد حصة يوم 1 نوفمبر (عطلة رسمية).</p>
+        <div id="days" class="days"><div class="loading">جارٍ تحميل المواعيد…</div></div>
+      </section>
+    </div>
+
+    <aside class="sticky">
+      <section class="panel">
+        <div class="step"><i>3</i><h2>سجّل مجموعتك</h2></div>
+        <label>العضو 1: الاسم الكامل <small>(الاسم واللقب)</small></label>
+        <input type="text" id="m1" autocomplete="off" placeholder="مثال: أمينة بن علي">
+        <label>العضو 2: الاسم الكامل</label>
+        <input type="text" id="m2" autocomplete="off" placeholder="مثال: ياسين حداد">
+        <label>اسم المجموعة <small>(اختياري)</small></label>
+        <input type="text" id="grp" autocomplete="off" placeholder="مثال: فريق Gradient">
+
+        <div class="summary">
+          <div><span>المشروع</span><b id="sumP">—</b></div>
+          <div><span>الموعد</span><b id="sumS">—</b></div>
+        </div>
+        <button class="btn" id="go" disabled>تأكيد الحجز</button>
+        <div class="msg" id="msg"></div>
+        <div class="live"><span class="dot"></span><span id="live">تُحدَّث المواعيد المتاحة تلقائياً</span></div>
+      </section>
+
+      <section class="panel">
+        <h2 style="font-size:16px">القواعد</h2>
+        <ul class="rules">
+          <li>العمل في <b>ثنائيات</b>، ولا يمكن للطالب الانتماء إلا لمجموعة واحدة.</li>
+          <li>مشروع واحد وموعد واحد لكل مجموعة. بعد الحجز يصبحان غير متاحين للآخرين.</li>
+          <li>اكتبوا <b>أسماءكم الحقيقية كاملة</b>، فهي تُستعمل لمنع التسجيل المكرر.</li>
+          <li>لتغيير الحجز تواصلوا مع الأستاذ، لا يمكن إعادة الحجز ذاتياً.</li>
+          <li>محتوى العرض: الإشكالية، البيانات، المنهجية، كود بايثون، النتائج والحدود. 15 دقيقة عرض + 5 دقائق أسئلة.</li>
+          <li>الدروس والأمثلة: <a href="https://github.com/brahzr/Deep-Learning" target="_blank" rel="noopener" class="ltr">github.com/brahzr/Deep-Learning</a></li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<div class="modal" id="modal">
+  <div class="box">
+    <div class="tick">✓</div>
+    <h2>تم تأكيد الحجز</h2>
+    <p style="color:var(--ink2);margin:6px 0 0;font-size:14px">احتفظوا برمز الحجز، والتقطوا صورة لهذه الشاشة.</p>
+    <div class="code" id="rCode"></div>
+    <div class="summary" id="rBody"></div>
+    <button class="btn" onclick="closeModal()">حسناً</button>
+  </div>
+</div>
+
+<script>
+  var state = null, sel = { project: null, slot: null }, filter = 'الكل', hideTaken = false, busy = false, opened = {};
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function tAr(p){ return p.title_ar || p.title; }
+
+  // Backend: Google Apps Script web app (JSON API) that reads/writes the Google Sheet
+  var API_URL = 'https://script.google.com/macros/s/AKfycbxDxDcpR3s3_zQ3IXdgp9Wj6gu4D7KqeIstlMtFSLZiSpRO46hSL1OVu-XDa61nqukG/exec';
+
+  function apiGet(){
+    return fetch(API_URL + '?action=state&t=' + Date.now(), { credentials: 'omit' })
+      .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+  }
+  function apiBook(form){
+    return fetch(API_URL, { method: 'POST', credentials: 'omit',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(form) })
+      .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+  }
+
+  function load(silent){
+    apiGet()
+      .then(function(s){ applyState(s, silent); })
+      .catch(function(e){ if(!silent) showMsg('err', 'تعذّر تحميل البيانات: ' + e.message + '. أعيدوا تحميل الصفحة.'); });
+  }
+
+  function applyState(s, silent){
+    var lostP = sel.project && s.projects.some(function(p){ return p.id === sel.project && p.taken; });
+    var lostS = sel.slot && s.slots.some(function(x){ return x.id === sel.slot && x.taken; });
+    state = s;
+    if (lostP) { sel.project = null; showMsg('warn', 'المشروع الذي اخترته حجزته مجموعة أخرى للتو. يرجى اختيار مشروع آخر.'); }
+    if (lostS) { sel.slot = null; showMsg('warn', 'الموعد الذي اخترته حُجز للتو. يرجى اختيار موعد آخر.'); }
+    document.getElementById('closed').style.display = s.open ? 'none' : 'block';
+    var freeP = s.projects.filter(function(p){ return !p.taken; }).length;
+    var freeS = s.slots.filter(function(x){ return !x.taken; }).length;
+    document.getElementById('fProjects').textContent = freeP + ' / ' + s.projects.length;
+    document.getElementById('fSlots').textContent = freeS + ' / ' + s.slots.length;
+    document.getElementById('live').textContent = 'آخر تحديث: ' + new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+    render();
+  }
+
+  function render(){
+    if (!state) return;
+    var fams = ['الكل'].concat(state.projects.map(function(p){ return p.family; }).filter(function(v,i,a){ return a.indexOf(v) === i; }));
+    document.getElementById('filters').innerHTML = fams.map(function(f){
+      return '<button class="chip' + (f === filter ? ' on' : '') + '" data-f="' + esc(f) + '">' + esc(f) + '</button>';
+    }).join('') + '<label class="toggle"><input type="checkbox" id="hide"' + (hideTaken ? ' checked' : '') + '> إخفاء المحجوز</label>';
+    document.querySelectorAll('.chip').forEach(function(b){ b.onclick = function(){ filter = b.dataset.f; render(); }; });
+    document.getElementById('hide').onchange = function(e){ hideTaken = e.target.checked; render(); };
+
+    var list = state.projects.filter(function(p){ return (filter === 'الكل' || p.family === filter) && !(hideTaken && p.taken); });
+    document.getElementById('projects').innerHTML = list.length ? list.map(function(p){
+      var dis = p.taken || !state.open;
+      return '<button class="proj' + (sel.project === p.id ? ' sel' : '') + '" data-id="' + esc(p.id) + '"' + (dis ? ' disabled' : '') + '>' +
+        '<div class="row"><span class="algo">' + esc(p.algorithm) + '</span>' +
+          (p.taken ? '<span class="badge taken">محجوز</span>' : '<span class="badge free">متاح</span>') + '</div>' +
+        '<div class="t">' + esc(tAr(p)) + '</div>' +
+        '<div class="en">' + esc(p.id) + ' · ' + esc(p.title) + '</div>' +
+        '<div class="p' + (opened[p.id] ? ' open' : '') + '">' + esc(p.problem_ar || p.problem) + '</div>' +
+        '<span class="more" data-more="' + esc(p.id) + '">' + (opened[p.id] ? 'عرض أقل' : 'اقرأ المزيد') + '</span>' +
+        '<div class="meta"><div>📊 البيانات: <a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.dataset) + '</a></div>' +
+        '<div>🎯 التقييم: <span class="m">' + esc(p.metric) + '</span></div></div>' +
+      '</button>';
+    }).join('') : '<div class="loading">لا توجد مشاريع مطابقة لهذا التصنيف.</div>';
+    document.querySelectorAll('.proj').forEach(function(b){
+      b.onclick = function(e){
+        if (e.target.tagName === 'A') return;
+        if (e.target.dataset.more) { opened[e.target.dataset.more] = !opened[e.target.dataset.more]; render(); return; }
+        sel.project = b.dataset.id; clearMsg(); render();
+      };
+    });
+
+    var days = {};
+    state.slots.forEach(function(s){ (days[s.date] = days[s.date] || { label: s.dateLabel, session: s.session, items: [] }).items.push(s); });
+    document.getElementById('days').innerHTML = Object.keys(days).sort().map(function(d){
+      var g = days[d], free = g.items.filter(function(s){ return !s.taken; }).length;
+      return '<div class="day"><h3>' + esc(g.label) + '</h3><small>الحصة ' + esc(g.session) + ' · ' + free + ' من ' + g.items.length + ' شاغرة</small><div class="slots">' +
+        g.items.map(function(s){
+          var dis = s.taken || !state.open;
+          return '<button class="slot' + (sel.slot === s.id ? ' sel' : '') + '" data-id="' + esc(s.id) + '"' + (dis ? ' disabled' : '') + '>' +
+            '<span class="ltr">' + esc(s.time) + '</span>' + (s.taken ? '<span class="badge taken">محجوز</span>' : '<span class="badge free">شاغر</span>') + '</button>';
+        }).join('') + '</div></div>';
+    }).join('');
+    document.querySelectorAll('.slot').forEach(function(b){ b.onclick = function(){ sel.slot = b.dataset.id; clearMsg(); render(); }; });
+
+    var P = state.projects.find(function(p){ return p.id === sel.project; });
+    var S = state.slots.find(function(s){ return s.id === sel.slot; });
+    document.getElementById('sumP').textContent = P ? P.id + ' · ' + tAr(P) : '—';
+    document.getElementById('sumS').innerHTML = S ? esc(S.dateLabel) + '، <span class="ltr">' + esc(S.time) + '</span>' : '—';
+    updateBtn();
+  }
+
+  function updateBtn(){
+    var ok = state && state.open && sel.project && sel.slot &&
+      fullName(document.getElementById('m1').value) && fullName(document.getElementById('m2').value) && !busy;
+    document.getElementById('go').disabled = !ok;
+  }
+  function fullName(v){ v = v.trim().replace(/\s+/g, ' '); return v.length >= 5 && v.split(' ').length >= 2; }
+
+  function submit(){
+    if (busy) return;
+    busy = true; updateBtn();
+    document.getElementById('go').textContent = 'جارٍ الحجز…';
+    apiBook({ projectId: sel.project, slotId: sel.slot,
+              member1: document.getElementById('m1').value, member2: document.getElementById('m2').value,
+              group: document.getElementById('grp').value })
+      .then(function(res){
+        busy = false; document.getElementById('go').textContent = 'تأكيد الحجز';
+        if (res.state) applyState(res.state, true);
+        if (!res.ok) { showMsg('err', res.error); updateBtn(); return; }
+        sel = { project: null, slot: null };
+        ['m1','m2','grp'].forEach(function(id){ document.getElementById(id).value = ''; });
+        clearMsg(); render(); showReceipt(res.booking);
+      })
+      .catch(function(e){
+        busy = false; document.getElementById('go').textContent = 'تأكيد الحجز';
+        showMsg('err', 'خطأ في الاتصال: ' + e.message + '. يرجى إعادة المحاولة.'); updateBtn();
+        load(true);
+      });
+  }
+
+  function showReceipt(b){
+    document.getElementById('rCode').textContent = b.bookingId;
+    var rows = [['المجموعة', esc(b.group)], ['العضوان', esc(b.member1) + ' و ' + esc(b.member2)], ['المشروع', esc(b.project)],
+                ['الخوارزمية', '<span class="ltr">' + esc(b.algorithm) + '</span>'], ['التاريخ', esc(b.date)], ['التوقيت', '<span class="ltr">' + esc(b.time) + '</span>']];
+    document.getElementById('rBody').innerHTML = rows.map(function(r){ return '<div><span>' + r[0] + '</span><b>' + r[1] + '</b></div>'; }).join('');
+    document.getElementById('modal').classList.add('show');
+  }
+  function closeModal(){ document.getElementById('modal').classList.remove('show'); }
+  function showMsg(kind, text){ var m = document.getElementById('msg'); m.className = 'msg ' + kind; m.textContent = text; }
+  function clearMsg(){ document.getElementById('msg').className = 'msg'; }
+
+  ['m1','m2','grp'].forEach(function(id){ document.getElementById(id).addEventListener('input', updateBtn); });
+  document.getElementById('go').onclick = submit;
+  load(false);
+  setInterval(function(){ if (!busy && !document.hidden) load(true); }, 20000);
+</script>
+</body>
+</html>
